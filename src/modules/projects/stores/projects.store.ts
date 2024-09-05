@@ -62,15 +62,29 @@ export const useProjectsStore = defineStore('projects', () => {
     projectList: computed(() => [...projects.value]),
     noProjects: computed(() => projects.value.length === 0),
 
-    // projectsWithCompletion: computed(() => {
+    projectsWithCompletion: computed(() => {
+      return projects.value.map((project) => {
+        const id = project.id;
+        const name = project.name;
+        const taskCount = project.task.length;
+        const completedTask = project.task.filter((task) => task.completedAt !== undefined);
+        const completion = taskCount === 0 ? 0 : completedTask.length / taskCount;
+        const completionPercentage = Math.round(completion * 100); // Calcula el porcentaje
+        return {
+          id,
+          name,
+          taskCount,
+          completionPercentage,
+          completedTask,
+        };
+      });
+    }),
     // return {
     //   id,
     //   name,
     //   taskCount,
     //   completion
     //   }
-    // }),
-
     // Actions - methods
     addProject,
     addTaskToProject,
